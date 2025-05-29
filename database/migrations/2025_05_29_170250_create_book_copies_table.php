@@ -4,24 +4,31 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+return new class extends Migration {
+    public function up()
     {
-        Schema::create('book_copies', function (Blueprint $table) {
+        Schema::create("book_copies", function (Blueprint $table) {
             $table->id();
+            $table->foreignId("book_id")->constrained()->onDelete("cascade");
+            $table->string("barcode")->unique();
+            $table
+                ->enum("status", [
+                    "available",
+                    "borrowed",
+                    "reserved",
+                    "damaged",
+                    "lost",
+                    "maintenance",
+                ])
+                ->default("available");
+            $table->text("condition_notes")->nullable();
+            $table->date("acquired_date");
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('book_copies');
+        Schema::dropIfExists("book_copies");
     }
 };

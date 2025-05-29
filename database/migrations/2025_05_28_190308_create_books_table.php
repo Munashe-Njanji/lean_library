@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use function Laravel\Prompts\table;
 
 return new class extends Migration {
     /**
@@ -22,6 +21,11 @@ return new class extends Migration {
             $table->integer("pages")->nullable();
             $table->string("publisher")->nullable();
             $table->string("cover_image_url")->nullable();
+            $table->string("language", 10)->default("en");
+            $table->decimal("price", 8, 2)->nullable();
+            $table
+                ->enum("status", ["available", "maintenance", "retired"])
+                ->default("available"); // Status of the book title itself
             $table->timestamps();
         });
     }
